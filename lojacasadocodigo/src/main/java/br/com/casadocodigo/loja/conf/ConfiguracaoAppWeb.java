@@ -10,13 +10,13 @@ import org.springframework.format.support.FormattingConversionService;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
-import br.com.casadocodigo.loja.controllers.HomeController;
 import br.com.casadocodigo.loja.converters.StringToCalendarConverver;
-import br.com.casadocodigo.loja.daos.ProdutoDAO;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackageClasses = { HomeController.class, ProdutoDAO.class })
+@ComponentScan(basePackages = "br.com.casadocodigo.loja")
+// @ComponentScan(basePackageClasses = { HomeController.class, ProdutoDAO.class
+// })
 public class ConfiguracaoAppWeb {
 
 	@Bean
