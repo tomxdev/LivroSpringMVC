@@ -36,9 +36,11 @@ public class ProdutosController {
 	public ModelAndView cadastra(
 			@Valid @ModelAttribute("produto") Produto produto,
 			BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+
 		if (bindingResult.hasErrors()) {
 			return form(produto);
 		}
+
 		produtos.adiciona(produto);
 		redirectAttributes.addFlashAttribute("sucesso",
 				"Produto cadastrado com sucesso");
@@ -67,5 +69,4 @@ public class ProdutosController {
 		modelAndView.addObject("produto", produto);
 		return modelAndView;
 	}
-
 }
