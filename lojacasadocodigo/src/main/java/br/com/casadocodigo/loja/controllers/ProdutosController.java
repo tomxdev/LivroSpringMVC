@@ -18,7 +18,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.com.casadocodigo.loja.daos.ProdutoDAO;
 import br.com.casadocodigo.loja.models.Produto;
-import br.com.casadocodigo.loja.validacao.ProdutoValidator;
 
 @Controller
 @Transactional
@@ -27,43 +26,46 @@ public class ProdutosController {
 
 	@Autowired
 	private ProdutoDAO produtos;
-	
-	@InitBinder
-    protected void initBinder(WebDataBinder binder) {
-		//binder.setValidator(new ProdutoValidator());
-    }	
 
-	@RequestMapping(method=RequestMethod.POST)
-	public ModelAndView cadastra(@Valid @ModelAttribute("produto") Produto produto,BindingResult bindingResult,RedirectAttributes redirectAttributes){
-		if(bindingResult.hasErrors()){
+	@InitBinder
+	protected void initBinder(WebDataBinder binder) {
+		// binder.setValidator(new ProdutoValidator());
+	}
+
+	@RequestMapping(method = RequestMethod.POST)
+	public ModelAndView cadastra(
+			@Valid @ModelAttribute("produto") Produto produto,
+			BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+		if (bindingResult.hasErrors()) {
 			return form(produto);
 		}
 		produtos.adiciona(produto);
-		redirectAttributes.addFlashAttribute("sucesso", "Produto cadastrado com sucesso");
+		redirectAttributes.addFlashAttribute("sucesso",
+				"Produto cadastrado com sucesso");
 		return new ModelAndView("redirect:produtos");
 	}
-	
+
 	@RequestMapping("/form")
-	public ModelAndView form(@ModelAttribute Produto produto){
+	public ModelAndView form(@ModelAttribute Produto produto) {
 		ModelAndView modelAndView = new ModelAndView("produtos/form");
 		modelAndView.addObject("tiposLivro", TipoLivro.values());
 		return modelAndView;
 	}
-	
-	@RequestMapping(method=RequestMethod.GET)
-	public ModelAndView lista(Model model){
+
+	@RequestMapping(method = RequestMethod.GET)
+	public ModelAndView lista(Model model) {
 		ModelAndView modelAndView = new ModelAndView("produtos/lista");
 		modelAndView.addObject("produtos", produtos.lista());
 		return modelAndView;
 	}
-	
+
 	@RequestMapping("/{id}")
-	public ModelAndView edita(@PathVariable("id") Integer id){
+	public ModelAndView edita(@PathVariable("id") Integer id) {
 		ModelAndView modelAndView = new ModelAndView("produtos/edita");
 		Produto produto = produtos.busca(id);
 		System.out.println(produto);
 		modelAndView.addObject("produto", produto);
 		return modelAndView;
 	}
-	
+
 }
