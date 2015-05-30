@@ -3,21 +3,22 @@ package br.com.casadocodigo.loja.conf;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.format.datetime.DateFormatter;
+import org.springframework.format.datetime.DateFormatterRegistrar;
 import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.format.support.FormattingConversionService;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
-import br.com.casadocodigo.loja.converters.StringToCalendarConverver;
+import br.com.casadocodigo.loja.controllers.HomeController;
+import br.com.casadocodigo.loja.daos.ProductDAO;
+import br.com.casadocodigo.loja.infra.FileSaver;
 
-@Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = "br.com.casadocodigo.loja")
-// @ComponentScan(basePackageClasses = { HomeController.class, ProdutoDAO.class
-// })
-public class ConfiguracaoAppWeb {
+@ComponentScan(basePackageClasses = { HomeController.class, ProductDAO.class,
+		FileSaver.class })
+public class AppWebConfiguration {
 
 	@Bean
 	public InternalResourceViewResolver internalResourceViewResolver() {
@@ -38,17 +39,13 @@ public class ConfiguracaoAppWeb {
 	}
 
 	@Bean
-	// O nome que devemos sobreescrever é mvcConversionService.
 	public FormattingConversionService mvcConversionService() {
 		DefaultFormattingConversionService conversionService = new DefaultFormattingConversionService(
 				true);
 
-		// Register date conversion with a specific global format
-		// DateFormatterRegistrar registrar = new DateFormatterRegistrar();
-		// registrar.setFormatter(new DateFormatter("yyyy-MM-dd"));
-		// registrar.registerFormatters(conversionService);
-		conversionService
-				.addFormatterForFieldAnnotation(new StringToCalendarConverver());
+		DateFormatterRegistrar registrar = new DateFormatterRegistrar();
+		registrar.setFormatter(new DateFormatter("yyyy-MM-dd"));
+		registrar.registerFormatters(conversionService);
 		return conversionService;
 	}
 

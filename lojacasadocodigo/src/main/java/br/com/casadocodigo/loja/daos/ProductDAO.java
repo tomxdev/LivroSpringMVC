@@ -7,25 +7,25 @@ import javax.persistence.PersistenceContext;
 
 import org.springframework.stereotype.Repository;
 
-import br.com.casadocodigo.loja.models.Produto;
+import br.com.casadocodigo.loja.models.Product;
 
 @Repository
-public class ProdutoDAO {
+public class ProductDAO {
 
 	@PersistenceContext
 	private EntityManager manager;
 
-	public void adiciona(Produto produto) {
+	public void save(Product produto) {
 		manager.persist(produto);
 	}
 
-	public List<Produto> lista() {
+	public List<Product> list() {
 		return manager.createQuery(
-				"select distinct(p) from Produto p join fetch p.valores",
-				Produto.class).getResultList();
+				"select distinct(p) from Product p join fetch p.prices",
+				Product.class).getResultList();
 	}
 
-	public Produto busca(Integer id) {
-		return manager.find(Produto.class, id);
+	public Product busca(Integer id) {
+		return manager.find(Product.class, id);
 	}
 }
